@@ -3,6 +3,16 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      client: {
+        src: ['public/client/*.js'],
+
+        dest: 'public/dist/clientBuild.js'
+      },
+      lib: {
+        src: ['public/lib/*.js'],
+
+        dest: 'public/dist/libBuild.js'
+      }
     },
 
     mochaTest: {
@@ -21,11 +31,21 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      client: {
+        files: {
+          'public/dist/clientBuild.min.js': ['public/dist/clientBuild.js']
+        }
+      },
+      lib: {
+        files: {
+          'public/dist/libBuild.min.js': ['public/dist/libBuild.js']
+        }
+      }
     },
 
     jshint: {
       files: [
-        // Add filespec list here
+        'public/dist/clientBuild.min.js', 'public/dist/libBuild.min.js'
       ],
       options: {
         force: 'true',
@@ -95,6 +115,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat',
+    'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
